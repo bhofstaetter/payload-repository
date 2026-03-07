@@ -40,10 +40,6 @@
                 "noRestrictedImports": "error",
                 "useNodejsImportProtocol": "error"
             }
-        },
-        "domains": {
-            "next": "recommended",
-            "react": "recommended"
         }
     },
     "assist": {

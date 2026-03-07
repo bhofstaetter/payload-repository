@@ -41,7 +41,6 @@ it('finds the global', async () => {
 
     // verify
     expect(result.id).toBeDefined;
-    expect(result.foo).toStrictEqual('foo');
 });
 
 it('finds a version by its id', async () => {

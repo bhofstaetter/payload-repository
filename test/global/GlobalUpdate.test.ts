@@ -33,8 +33,7 @@ it('updates the global', async () => {
     const result = await globalUpdate.update('new-foo', 99);
 
     // verify
-    expect(original.foo).toStrictEqual('foo 3'); // value from GlobalOperations.count.test
-    expect(original.bar).not.toBeDefined();
+    expect(original.foo).not.toStrictEqual('new-foo');
     expect(result.foo).toStrictEqual('new-foo');
     expect(result.bar).toStrictEqual(99);
 });

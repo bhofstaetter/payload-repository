@@ -1,6 +1,6 @@
 {
     "name": "@bhofstaetter/payloadcms-repository",
-    "version": "0.1.1",
+    "version": "1.0.0",
     "description": "Opinionated repository and operations object wrapper around Payload's Local API.",
     "license": "MIT",
     "author": "Benedikt Hofstätter",

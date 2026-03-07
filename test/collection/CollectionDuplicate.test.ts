@@ -18,7 +18,7 @@ class CollectionDuplicate extends CollectionOperations<Config, 'dummies'> {
     }
 
     // duplicate methods
-    
+
     duplicate(id: number) {
         return this.repository.duplicate(id);
     }
