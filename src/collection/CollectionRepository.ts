@@ -3,6 +3,7 @@ import type {
     BulkOperationResult,
     CollectionSlug,
     DataFromCollectionSlug,
+    DefaultDocumentIDType,
     PaginatedDistinctDocs,
     PaginatedDocs,
     RequiredDataFromCollectionSlug,
@@ -12,7 +13,7 @@ import type {
     Where,
 } from 'payload';
 import type {DeepPartial} from 'ts-essentials';
-import type {AnyCollectionConfig, DbId} from '@/types';
+import type {AnyCollectionConfig} from '@/types';
 
 export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug extends CollectionSlug> {
     protected readonly payload: BasePayload;
@@ -54,7 +55,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async duplicate<TSelect extends TypedSelect<TConfig, TSlug> = TypedSelect<TConfig, TSlug>>(
-        id: DbId,
+        id: DefaultDocumentIDType,
         options?: DuplicateOptions<TConfig, TSlug, TSelect>,
     ): Promise<SelectResult<TSlug, TSelect>> {
         return this.payload.duplicate({
@@ -74,7 +75,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async findById<TSelect extends TypedSelect<TConfig, TSlug> = TypedSelect<TConfig, TSlug>>(
-        id: DbId,
+        id: DefaultDocumentIDType,
         options?: FindByIdOptions<TConfig, TSlug, TSelect>,
     ): Promise<SelectResult<TSlug, TSelect>> {
         return this.payload.findByID({
@@ -85,7 +86,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async findByIds<TSelect extends TypedSelect<TConfig, TSlug> = TypedSelect<TConfig, TSlug>>(
-        ids: DbId[],
+        ids: DefaultDocumentIDType[],
         options?: FindOptions<TConfig, TSlug, TSelect>,
     ): Promise<PaginatedSelectResult<TSlug, TSelect>> {
         return this.payload.find({
@@ -107,7 +108,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async findVersionById(
-        id: string,
+        id: TypeWithVersion<unknown>['id'],
         options?: FindVersionByIdOptions,
     ): Promise<TypeWithVersion<DataFromCollectionSlug<TSlug>>> {
         return this.payload.findVersionByID({
@@ -154,7 +155,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async updateById<TSelect extends TypedSelect<TConfig, TSlug> = TypedSelect<TConfig, TSlug>>(
-        id: DbId,
+        id: DefaultDocumentIDType,
         data: UpdateData<TSlug>,
         options?: UpdateByIdOptions<TConfig, TSlug, TSelect>,
     ): Promise<SelectResult<TSlug, TSelect>> {
@@ -167,7 +168,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async updateByIds<TSelect extends TypedSelect<TConfig, TSlug> = TypedSelect<TConfig, TSlug>>(
-        ids: DbId[],
+        ids: DefaultDocumentIDType[],
         data: UpdateData<TSlug>,
         options?: UpdateOptions<TConfig, TSlug, TSelect>,
     ): Promise<BulkOperationResult<TSlug, TSelect>> {
@@ -191,7 +192,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async deleteById<TSelect extends TypedSelect<TConfig, TSlug> = TypedSelect<TConfig, TSlug>>(
-        id: DbId,
+        id: DefaultDocumentIDType,
         options?: DeleteOptions<TConfig, TSlug, TSelect>,
     ): Promise<SelectResult<TSlug, TSelect>> {
         return this.payload.delete({
@@ -202,7 +203,7 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
     }
 
     async deleteByIds<TSelect extends TypedSelect<TConfig, TSlug> = TypedSelect<TConfig, TSlug>>(
-        ids: DbId[],
+        ids: DefaultDocumentIDType[],
         options?: DeleteOptions<TConfig, TSlug, TSelect>,
     ): Promise<BulkOperationResult<TSlug, TSelect>> {
         return this.payload.delete({

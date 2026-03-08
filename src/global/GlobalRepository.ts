@@ -8,7 +8,7 @@ import type {
     TypeWithVersion,
 } from 'payload';
 import type {DeepPartial} from 'ts-essentials';
-import type {AnyGlobalConfig, DbId} from '@/types';
+import type {AnyGlobalConfig} from '@/types';
 
 export class GlobalRepository<TConfig extends AnyGlobalConfig, TSlug extends GlobalSlug> {
     protected readonly payload: BasePayload;
@@ -29,7 +29,7 @@ export class GlobalRepository<TConfig extends AnyGlobalConfig, TSlug extends Glo
     }
 
     async findVersionById(
-        id: DbId,
+        id: TypeWithVersion<unknown>['id'],
         options?: FindGlobalVersionByIdOptions,
     ): Promise<TypeWithVersion<DataFromGlobalSlug<TSlug>>> {
         return this.payload.findGlobalVersionByID({

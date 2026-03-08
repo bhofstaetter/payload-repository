@@ -1,6 +1,6 @@
 {
     "name": "payload-repository",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "Opinionated repository and operations object wrapper around Payload's Local API.",
     "license": "MIT",
     "author": "Benedikt Hofstätter",
