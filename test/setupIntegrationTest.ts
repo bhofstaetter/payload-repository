@@ -1,1 +1,1 @@
-export {setup, teardown} from '@bhofstaetter/payloadcms-integration-test-utils';
+export {setup, teardown} from 'payload-integration-test-utils';

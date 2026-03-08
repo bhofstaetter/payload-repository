@@ -1,11 +1,11 @@
-# payload-repository
+# Payload Repository and Operations
 
 Opinionated repository and operations object wrapper around Payload's Local API.
 
 ## Installation
 
 ```sh
-npm install @bhofstaetter/payloadcms-repository
+npm install payload-repository
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ Extend `CollectionOperations` to encapsulate domain-specific operations logic fo
 ```ts
 import type {BasePayload} from 'payload';
 import type {Config} from '@/payload-types';
-import {CollectionOperations} from '@bhofstaetter/payloadcms-repository';
+import {CollectionOperations} from 'payload-repository';
 
 class PostsOperations extends CollectionOperations<Config, 'posts'> {
     constructor(payload: BasePayload) {
@@ -66,7 +66,7 @@ Extend `GlobalOperations` to encapsulate domain-specific operations logic for a 
 ```ts
 import type {BasePayload} from 'payload';
 import type {Config} from '@/payload-types';
-import {GlobalOperations} from '@bhofstaetter/payloadcms-repository';
+import {GlobalOperations} from 'payload-repository';
 
 class SettingsOperations extends GlobalOperations<Config, 'settings'> {
     constructor(payload: BasePayload) {

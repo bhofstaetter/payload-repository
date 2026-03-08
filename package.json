@@ -1,13 +1,13 @@
 {
-    "name": "@bhofstaetter/payloadcms-repository",
-    "version": "1.0.5",
+    "name": "payload-repository",
+    "version": "1.0.0",
     "description": "Opinionated repository and operations object wrapper around Payload's Local API.",
     "license": "MIT",
     "author": "Benedikt Hofstätter",
-    "homepage": "https://github.com/bhofstaetter/payloadcms-repository",
+    "homepage": "https://github.com/bhofstaetter/payload-repository",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/bhofstaetter/payloadcms-repository.git"
+        "url": "git+https://github.com/bhofstaetter/payload-repository.git"
     },
     "keywords": [
         "payload",
@@ -41,11 +41,11 @@
         "ts-essentials": ">=10"
     },
     "devDependencies": {
-        "@bhofstaetter/payloadcms-integration-test-utils": "^1.0.0",
         "@biomejs/biome": "2.4.4",
         "@payloadcms/db-postgres": "^3.78.0",
         "@testcontainers/postgresql": "^11.11.0",
         "payload": "^3.78.0",
+        "payload-integration-test-utils": "^1.0.0",
         "ts-essentials": "^10.0.0",
         "tsc-alias": "^1.8.16",
         "typescript": "^5",
