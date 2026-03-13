@@ -8,23 +8,57 @@ import type {
     TypeWithVersion,
 } from 'payload';
 import type {DeepPartial} from 'ts-essentials';
+import {RepositorySupport} from '@/RepositorySupport.js';
 import type {AnyGlobalConfig} from '@/types.js';
+
+export type GlobalTransformers<TConfig extends AnyGlobalConfig, TSlug extends GlobalSlug> = {
+    find?: {
+        options?: (
+            options: FindGlobalOptions<TConfig, TSlug>,
+        ) => FindGlobalOptions<TConfig, TSlug> | Promise<FindGlobalOptions<TConfig, TSlug>>;
+    };
+    findVersionById?: {
+        options?: (
+            options: FindGlobalVersionByIdOptions,
+        ) => FindGlobalVersionByIdOptions | Promise<FindGlobalVersionByIdOptions>;
+    };
+    findVersions?: {
+        options?: (
+            options: FindGlobalVersionsOptions,
+        ) => FindGlobalVersionsOptions | Promise<FindGlobalVersionsOptions>;
+    };
+    countVersions?: {
+        options?: (
+            options: GlobalCountVersionsOptions,
+        ) => GlobalCountVersionsOptions | Promise<GlobalCountVersionsOptions>;
+    };
+    update?: {
+        data?: (data: UpdateGlobalData<TSlug>) => UpdateGlobalData<TSlug> | Promise<UpdateGlobalData<TSlug>>;
+        options?: (
+            options: UpdateGlobalOptions<TConfig, TSlug>,
+        ) => UpdateGlobalOptions<TConfig, TSlug> | Promise<UpdateGlobalOptions<TConfig, TSlug>>;
+    };
+};
 
 export class GlobalRepository<TConfig extends AnyGlobalConfig, TSlug extends GlobalSlug> {
     protected readonly payload: BasePayload;
     protected readonly globalSlug: TSlug;
+    protected readonly transformers?: GlobalTransformers<TConfig, TSlug>;
 
-    constructor(payload: BasePayload, globalSlug: TSlug) {
+    constructor(payload: BasePayload, globalSlug: TSlug, transformers?: GlobalTransformers<TConfig, TSlug>) {
         this.payload = payload;
         this.globalSlug = globalSlug;
+        this.transformers = transformers;
     }
 
     async find<TSelect extends TypedGlobalSelect<TConfig, TSlug> = TypedGlobalSelect<TConfig, TSlug>>(
         options?: FindGlobalOptions<TConfig, TSlug, TSelect>,
     ): Promise<GlobalSelectResult<TSlug, TSelect>> {
+        const transformedOptions = await RepositorySupport.applyTransformer(this.transformers?.find?.options, options);
+
         return this.payload.findGlobal({
             slug: this.globalSlug,
-            ...options,
+            ...transformedOptions,
         });
     }
 
@@ -32,26 +66,41 @@ export class GlobalRepository<TConfig extends AnyGlobalConfig, TSlug extends Glo
         id: TypeWithVersion<unknown>['id'],
         options?: FindGlobalVersionByIdOptions,
     ): Promise<TypeWithVersion<DataFromGlobalSlug<TSlug>>> {
+        const transformedOptions = await RepositorySupport.applyTransformer(
+            this.transformers?.findVersionById?.options,
+            options,
+        );
+
         return this.payload.findGlobalVersionByID({
             slug: this.globalSlug,
             id,
-            ...options,
+            ...transformedOptions,
         });
     }
 
     async findVersions(
         options?: FindGlobalVersionsOptions,
     ): Promise<PaginatedDocs<TypeWithVersion<DataFromGlobalSlug<TSlug>>>> {
+        const transformedOptions = await RepositorySupport.applyTransformer(
+            this.transformers?.findVersions?.options,
+            options,
+        );
+
         return this.payload.findGlobalVersions({
             slug: this.globalSlug,
-            ...options,
+            ...transformedOptions,
         });
     }
 
     async countVersions(options?: GlobalCountVersionsOptions): CountVersionsResult {
+        const transformedOptions = await RepositorySupport.applyTransformer(
+            this.transformers?.countVersions?.options,
+            options,
+        );
+
         return this.payload.countGlobalVersions({
             global: this.globalSlug,
-            ...options,
+            ...transformedOptions,
         });
     }
 
@@ -59,10 +108,16 @@ export class GlobalRepository<TConfig extends AnyGlobalConfig, TSlug extends Glo
         data: UpdateGlobalData<TSlug>,
         options?: UpdateGlobalOptions<TConfig, TSlug, TSelect>,
     ): Promise<GlobalSelectResult<TSlug, TSelect>> {
+        const transformedData = await RepositorySupport.applyTransformer(this.transformers?.update?.data, data);
+        const transformedOptions = await RepositorySupport.applyTransformer(
+            this.transformers?.update?.options,
+            options,
+        );
+
         return this.payload.updateGlobal({
             slug: this.globalSlug,
-            data,
-            ...options,
+            data: transformedData,
+            ...transformedOptions,
         });
     }
 }

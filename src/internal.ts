@@ -1,8 +1,10 @@
 export type {
     CollectionCountVersionsOptions,
+    CollectionTransformers,
     CountOptions,
     CountResult,
     CountVersionsResult as CollectionCountVersionsResult,
+    CreateData,
     CreateOptions,
     DeleteOptions,
     DraftDataFromCollectionSlug,
@@ -27,6 +29,7 @@ export type {
     FindGlobalVersionsOptions,
     GlobalCountVersionsOptions,
     GlobalSelectResult,
+    GlobalTransformers,
     TypedGlobalSelect,
     UpdateGlobalData,
     UpdateGlobalOptions,
