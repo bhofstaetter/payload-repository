@@ -118,4 +118,3 @@ it('transforms countVersions options', async () => {
 
     expect(result.totalDocs).toStrictEqual(2);
 });
-

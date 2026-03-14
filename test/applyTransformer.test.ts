@@ -28,10 +28,13 @@ describe('applyTransformer', () => {
     });
 
     it('supports async transformers', async () => {
-        const result = await applyTransformer(async data => {
-            await Promise.resolve();
-            return {...data, foo: 'async'};
-        }, {foo: 'bar'});
+        const result = await applyTransformer(
+            async data => {
+                await Promise.resolve();
+                return {...data, foo: 'async'};
+            },
+            {foo: 'bar'},
+        );
 
         expect(result).toStrictEqual({foo: 'async'});
     });

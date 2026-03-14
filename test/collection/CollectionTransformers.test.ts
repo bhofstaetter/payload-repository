@@ -442,4 +442,3 @@ it('transforms duplicate options', async () => {
     expect(duplicated._status).toStrictEqual('draft');
     expect(duplicated.bar).toStrictEqual(11);
 });
-
