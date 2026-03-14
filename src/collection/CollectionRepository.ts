@@ -110,11 +110,14 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
             }) as Promise<SelectResult<TSlug, TSelect>>;
         }
 
-        // todo: wie unterscheiden zwischen collections mit versioned wo published nötig und unversioned?
+        const hasDrafts = this.hasDrafts();
+        const createData = hasDrafts
+            ? ({...transformedData, _status: 'published'} as RequiredDataFromCollectionSlug<TSlug>)
+            : (transformedData as RequiredDataFromCollectionSlug<TSlug>);
 
         return this.payload.create({
             collection: this.collectionSlug,
-            data: {...transformedData, _status: 'published'} as RequiredDataFromCollectionSlug<TSlug>,
+            data: createData,
             ...transformedOptions,
         }) as Promise<SelectResult<TSlug, TSelect>>;
     }
@@ -314,6 +317,11 @@ export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug ext
             where: {id: {in: ids}},
             ...transformedOptions,
         }) as Promise<BulkOperationResult<TSlug, TSelect>>;
+    }
+
+    private hasDrafts(): boolean {
+        const collection = this.payload.collections[this.collectionSlug];
+        return !!collection.config.versions && collection.config.versions.drafts !== false;
     }
 }
 

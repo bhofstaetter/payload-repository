@@ -17,6 +17,21 @@ const DummyCollection: CollectionConfig = {
     ],
 };
 
+const DummyCollectionUnversioned: CollectionConfig = {
+    slug: 'unversioned',
+    fields: [
+        {
+            type: 'text',
+            name: 'foo',
+            required: true,
+        },
+        {
+            type: 'number',
+            name: 'bar',
+        },
+    ],
+};
+
 const DummyGlobal: GlobalConfig = {
     slug: 'dummy',
     typescript: {
@@ -39,7 +54,7 @@ const DummyGlobal: GlobalConfig = {
 
 export const getTestContext = () =>
     getTestContextFor({
-        collections: [DummyCollection],
+        collections: [DummyCollection, DummyCollectionUnversioned],
         globals: [DummyGlobal],
         tsOutputFile: './test/helpers/payload.test.types.ts',
     });

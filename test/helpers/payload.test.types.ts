@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     dummies: Dummy;
+    unversioned: Unversioned;
     'payload-kv': PayloadKv;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
@@ -77,6 +78,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     dummies: DummiesSelect<false> | DummiesSelect<true>;
+    unversioned: UnversionedSelect<false> | UnversionedSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -135,6 +137,17 @@ export interface Dummy {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "unversioned".
+ */
+export interface Unversioned {
+  id: number;
+  foo: string;
+  bar?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -185,6 +198,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'dummies';
         value: number | Dummy;
+      } | null)
+    | ({
+        relationTo: 'unversioned';
+        value: number | Unversioned;
       } | null)
     | ({
         relationTo: 'users';
@@ -242,6 +259,16 @@ export interface DummiesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "unversioned_select".
+ */
+export interface UnversionedSelect<T extends boolean = true> {
+  foo?: T;
+  bar?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
