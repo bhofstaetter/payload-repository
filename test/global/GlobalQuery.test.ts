@@ -40,7 +40,7 @@ it('finds the global', async () => {
     const result = await globalQuery.find();
 
     // verify
-    expect(result.id).toBeDefined;
+    expect(result.id).toBeDefined();
 });
 
 it('finds a version by its id', async () => {

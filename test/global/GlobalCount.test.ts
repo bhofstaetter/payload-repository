@@ -6,7 +6,7 @@ import {GlobalOperations} from '@/global/GlobalOperations';
 
 const ctx = getTestContext();
 
-class GlobalQuery extends GlobalOperations<Config, 'dummy'> {
+class GlobalCount extends GlobalOperations<Config, 'dummy'> {
     constructor(payload: BasePayload) {
         super(payload, 'dummy');
     }
@@ -26,14 +26,14 @@ class GlobalQuery extends GlobalOperations<Config, 'dummy'> {
 
 it('counts all versions', async () => {
     // prepare
-    const globalQuery = new GlobalQuery(ctx.payload);
-    const initVersionCount = await globalQuery.countVersions().then(page => page.totalDocs);
+    const globalCount = new GlobalCount(ctx.payload);
+    const initVersionCount = await globalCount.countVersions().then(page => page.totalDocs);
 
-    await globalQuery.update('foo 2');
-    await globalQuery.update('foo 3');
+    await globalCount.update('foo 2');
+    await globalCount.update('foo 3');
 
     // test
-    const result = await globalQuery.countVersions();
+    const result = await globalCount.countVersions();
 
     // verify
     expect(result.totalDocs).toStrictEqual(initVersionCount + 2);
