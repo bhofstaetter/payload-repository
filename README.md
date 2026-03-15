@@ -10,7 +10,8 @@ npm install payload-repository
 
 ## Usage
 
-Pass your generated Payload `Config` type as the first type argument to get full type safety on fields, select, and return types.
+Pass your generated Payload `Config` type as the first type argument to get full type safety on fields, select, and
+return types.
 
 ### CollectionOperations
 
@@ -31,7 +32,7 @@ class PostsOperations extends CollectionOperations<Config, 'posts'> {
     }
 
     findAll() {
-        return this.repository.find();
+        return this.repository.find({});
     }
 
     findById(id: number) {
@@ -39,7 +40,7 @@ class PostsOperations extends CollectionOperations<Config, 'posts'> {
     }
 
     findPublished() {
-        return this.repository.find({where: {status: {equals: 'published'}}});
+        return this.repository.find({status: {equals: 'published'}});
     }
 
     publish(id: number) {
@@ -91,14 +92,16 @@ await settingsOperations.setSiteTitle('My Site');
 
 ### Transformers
 
-Transformers are optional middleware functions that intercept and modify arguments before they reach the Payload API. They can transform `data`, `where` clauses, and `options` on a per-operation basis.
+Transformers are optional middleware functions that intercept and modify arguments before they reach the Payload API.
+They can transform `data`, `where` clauses, and `options` on a per-operation basis.
 
 Pass transformers as the third argument to `CollectionOperations` or `GlobalOperations`:
 
 ```ts
 import type {BasePayload} from 'payload';
 import type {Config} from '@/payload-types';
-import {CollectionOperations, type CollectionTransformers} from 'payload-repository';
+import {CollectionOperations} from 'payload-repository';
+import type {CollectionTransformers} from 'payload-repository/internal/types';
 
 const tenantTransformers = (tenantId: number): CollectionTransformers<Config, 'posts'> => ({
     create: {
@@ -126,7 +129,7 @@ class PostsOperations extends CollectionOperations<Config, 'posts'> {
     }
 
     findAll() {
-        return this.repository.find();
+        return this.repository.find({});
     }
 }
 
@@ -141,6 +144,47 @@ const posts = await tenantPosts.findAll();
 ```
 
 Transformers support async functions and are available for all repository operations.
+
+### Merging Transformers
+
+When building layered repositories where each layer contributes its own transformers, use `mergeTransformers` to combine
+them. Overlapping transformers on the same operation and argument are chained sequentially:
+
+```ts
+import type {BasePayload} from 'payload';
+import type {Config} from '@/payload-types';
+import {CollectionOperations, mergeTransformers} from 'payload-repository';
+import type {CollectionTransformers} from 'payload-repository/internal/types';
+
+const tenantTransformers = (tenantId: number): CollectionTransformers<Config, 'posts'> => ({
+    find: {
+        where: where => ({...where, tenant: {equals: tenantId}}),
+    },
+});
+
+const localeTransformers = (locale: string): CollectionTransformers<Config, 'posts'> => ({
+    find: {
+        options: options => ({...options, locale}),
+    },
+});
+
+class PostsOperations extends CollectionOperations<Config, 'posts'> {
+    constructor(payload: BasePayload, tenantId: number, locale: string) {
+        super(payload, 'posts', mergeTransformers(
+            tenantTransformers(tenantId),
+            localeTransformers(locale),
+        ));
+    }
+
+    findAll() {
+        return this.repository.find({});
+    }
+}
+```
+
+`mergeTransformers` works with both `CollectionTransformers` and `GlobalTransformers`. When multiple transformer objects
+define the same leaf (e.g. both define `find.where`), they are chained in order — the second transformer receives the
+output of the first.
 
 ## License
 
