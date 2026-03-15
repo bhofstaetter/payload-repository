@@ -1,5 +1,6 @@
 import {describe, expect, it} from 'vitest';
-import {applyTransformer} from '@/RepositorySupport';
+
+import {applyTransformer} from '@/transfomer.js';
 
 describe('applyTransformer', () => {
     it('returns data unchanged when no transformer is provided', async () => {

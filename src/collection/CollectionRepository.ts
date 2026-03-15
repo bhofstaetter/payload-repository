@@ -13,10 +13,11 @@ import type {
     Where,
 } from 'payload';
 import type {DeepPartial} from 'ts-essentials';
-import {applyTransformer, type Transformer} from '@/RepositorySupport.js';
-import type {AnyCollectionConfig} from '@/types.js';
+import {applyTransformer} from '@/transfomer.js';
+import type {AnyCollectionConfig, OperationsTransformerMap, Transformer} from '@/types.js';
 
-export type CollectionTransformers<TConfig extends AnyCollectionConfig, TSlug extends CollectionSlug> = {
+export interface CollectionTransformers<TConfig extends AnyCollectionConfig, TSlug extends CollectionSlug>
+    extends OperationsTransformerMap {
     create?: {
         data?: Transformer<CreateData<TSlug>>;
         options?: Transformer<CreateOptions<TConfig, TSlug>>;
@@ -72,7 +73,7 @@ export type CollectionTransformers<TConfig extends AnyCollectionConfig, TSlug ex
     deleteByIds?: {
         options?: Transformer<DeleteOptions<TConfig, TSlug>>;
     };
-};
+}
 
 export class CollectionRepository<TConfig extends AnyCollectionConfig, TSlug extends CollectionSlug> {
     protected readonly payload: BasePayload;

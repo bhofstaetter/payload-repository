@@ -8,10 +8,11 @@ import type {
     TypeWithVersion,
 } from 'payload';
 import type {DeepPartial} from 'ts-essentials';
-import {applyTransformer, type Transformer} from '@/RepositorySupport.js';
-import type {AnyGlobalConfig} from '@/types.js';
+import {applyTransformer} from '@/transfomer.js';
+import type {AnyGlobalConfig, OperationsTransformerMap, Transformer} from '@/types.js';
 
-export type GlobalTransformers<TConfig extends AnyGlobalConfig, TSlug extends GlobalSlug> = {
+export interface GlobalTransformers<TConfig extends AnyGlobalConfig, TSlug extends GlobalSlug>
+    extends OperationsTransformerMap {
     find?: {
         options?: Transformer<FindGlobalOptions<TConfig, TSlug>>;
     };
@@ -28,7 +29,7 @@ export type GlobalTransformers<TConfig extends AnyGlobalConfig, TSlug extends Gl
         data?: Transformer<UpdateGlobalData<TSlug>>;
         options?: Transformer<UpdateGlobalOptions<TConfig, TSlug>>;
     };
-};
+}
 
 export class GlobalRepository<TConfig extends AnyGlobalConfig, TSlug extends GlobalSlug> {
     protected readonly payload: BasePayload;
